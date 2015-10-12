@@ -14,4 +14,10 @@ defmodule ElixirUrlTest do
     assert ElixirUrl.url(:erlang, :binary_to_integer, 1) == nil
   end
 
+  test "Elixir url for hex project" do
+    assert ElixirUrl.url(Ecto) == "http://hexdocs.pm/ecto/Ecto.html"
+    assert ElixirUrl.url(Ecto.Date, :cast) == "http://hexdocs.pm/ecto/Ecto.Date.html#functions"
+    assert ElixirUrl.url(Ecto.Date, :cast, 1) == "http://hexdocs.pm/ecto/Ecto.Date.html#cast/1"
+  end
+
 end
