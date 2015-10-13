@@ -5,9 +5,9 @@ defmodule ElixirUrl do
 
   """
 
-  @head  "http://elixir-lang.org/docs/stable/elixir/"
+  @head  "http://elixir-lang.org/docs/stable/"
   @hexhead "http://hexdocs.pm/"
-  @elixir_apps [:iex, :logger, :elixir, :mix, :exx]
+  @elixir_apps [:iex, :logger, :elixir, :mix, :exx, :ex_unit]
 
   #http://elixir-lang.org/docs/stable/elixir/Base.html
   def url(module) do
@@ -40,16 +40,28 @@ defmodule ElixirUrl do
   end
 
   defp head(module) do
-    case Enum.any?(@elixir_apps, fn(app) -> in_app?(app,module) end) do
-      true -> @head
+    case core_elixir?(module) do
+      { true, app } -> @head<>lctrim(app)<>"/"
       _ -> @hexhead<>lctrim(module)<>"/"
     end
   end
 
+  defp core_elixir?(module) do
+    case Enum.find(@elixir_apps, fn(app) -> in_app?(app, module) end) do
+      nil ->
+        case Enum.find(@elixir_apps, fn(app) -> Atom.to_string(app) == lctrim(module) end ) do
+          nil -> false
+          app -> {true, app}
+        end
+      app  -> {true, app}
+    end
+  end
+
+  # does not work for applications that are not loaded.
   defp in_app?(application,module) do
     case :application.get_key(application, :modules) do
       {:ok, module_list} -> Enum.any?(module_list, fn(mod) -> mod == module end )
-      _ -> false
+      :undefined -> false
     end
   end
 
@@ -64,7 +76,14 @@ defmodule ElixirUrl do
     |> trim
     |> String.split(".")
     |> Enum.at(0)
+    |> add_underscore
     |> String.downcase
+  end
+
+  defp add_underscore(string) do
+    string
+    |> String.replace(~r/([A-Z])/, "_\\1")
+    |> String.replace( ~r/^\_/, "")
   end
 
 end

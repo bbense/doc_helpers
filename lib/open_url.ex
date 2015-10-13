@@ -23,7 +23,7 @@ defmodule OpenUrl do
   end
 
   # No way to specify arity on dash search url.
-  def documentation(module, function, arity) do
+  def documentation(module, function, _arity) do
     documentation(module, function)
   end
 

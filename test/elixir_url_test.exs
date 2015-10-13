@@ -20,4 +20,12 @@ defmodule ElixirUrlTest do
     assert ElixirUrl.url(Ecto.Date, :cast, 1) == "http://hexdocs.pm/ecto/Ecto.Date.html#cast/1"
   end
 
+  test "Elixir url for Mix" do
+    assert ElixirUrl.url(Mix) == "http://elixir-lang.org/docs/stable/mix/Mix.html"
+  end
+
+  test "Elixir url for ExUnit" do
+    assert ElixirUrl.url(ExUnit) == "http://elixir-lang.org/docs/stable/ex_unit/ExUnit.html"
+  end
+
 end
