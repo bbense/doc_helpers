@@ -49,10 +49,12 @@ defmodule ElixirUrl do
   defp core_elixir?(module) do
     case Enum.find(@elixir_apps, fn(app) -> in_app?(app, module) end) do
       nil ->
-        case Enum.find(@elixir_apps, fn(app) -> Atom.to_string(app) == lctrim(module) end ) do
-          nil -> false
-          app -> {true, app}
-        end
+        @elixir_apps
+        |> Enum.find(fn(app) -> Atom.to_string(app) == lctrim(module) end)
+        |> case do
+            nil -> false
+            app -> {true, app}
+          end
       app  -> {true, app}
     end
   end
