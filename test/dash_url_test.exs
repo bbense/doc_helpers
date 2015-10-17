@@ -2,10 +2,16 @@ defmodule DashUrlTest do
   use ExUnit.Case
   doctest DashUrl
 
-  test "Elixir url" do
+  test "Elixir Core url" do
     assert DashUrl.url(Atom) == "dash://elixir:Atom"
     assert DashUrl.url(Atom, :to_string) == "dash://elixir:Atom.to_string"
     assert DashUrl.url(Atom, :to_string, 1) == "dash://elixir:Atom.to_string"
+  end
+
+  test "Elixir url" do
+    assert DashUrl.url(Ecto.Date) == "dash://hex:Ecto.Date"
+    assert DashUrl.url(Ecto.Date, :from_erl) == "dash://hex:Ecto.Date.from_erl"
+    assert DashUrl.url(Ecto.Date, :from_erl, 1) == "dash://hex:Ecto.Date.from_erl"
   end
 
   test "Erlang url" do

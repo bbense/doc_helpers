@@ -46,7 +46,11 @@ defmodule ElixirUrl do
     end
   end
 
-  defp core_elixir?(module) do
+  @doc """
+  Determines whether module is in core elixir distribution or not.
+
+  """
+  def core_elixir?(module) do
     case Enum.find(@elixir_apps, fn(app) -> in_app?(app, module) end) do
       nil ->
         @elixir_apps
@@ -59,7 +63,7 @@ defmodule ElixirUrl do
     end
   end
 
-  # does not work for applications that are not loaded.
+  # only works for applications that are loaded.
   defp in_app?(application,module) do
     case :application.get_key(application, :modules) do
       {:ok, module_list} -> Enum.any?(module_list, fn(mod) -> mod == module end )

@@ -7,15 +7,22 @@ defmodule DashUrl do
 
   def url(module) do
     case elixir?(module) do
-      true -> "dash://elixir:"<>trim(module)
+      true -> head(module)<>trim(module)
       _  ->  "dash://erl:"<>Atom.to_string(module)
     end
   end
 
   def url(module, function) do
     case elixir?(module) do
-      true -> "dash://elixir:"<>trim(module)<>"."<>Atom.to_string(function)
+      true -> head(module)<>trim(module)<>"."<>Atom.to_string(function)
       _  -> "dash://erl:"<>Atom.to_string(module)<>":"<>Atom.to_string(function)
+    end
+  end
+
+  defp head(module) do
+    case ElixirUrl.core_elixir?(module) do
+      {true, _app} -> "dash://elixir:"
+      _ -> "dash://hex:"
     end
   end
 
